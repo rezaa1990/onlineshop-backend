@@ -17,17 +17,20 @@ module.exports = new (class extends controller {
     }
     // const {email, name, password} = req.body;
     // user = new this.User({email, name, password});
-    user = new this.User(_.pick(req.body, ["name", "email", "password"]));
-
     const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(user.password, salt);
+    console.log(req.body);
+    const password = await bcrypt.hash(req.body.password, salt);
+    user = new this.User(_.pick(req.body, ["fname", "lname", "mobile", "email","address","postalcode","isadmin"]));
+    user.password=password;
+
+
 
     await user.save();
 
     this.response({
       res,
       message: "the user successfuly registered",
-      data: _.pick(user, ["_id", "name", "email"]),
+      data: _.pick(user, ["fname", "lname", "mobile", "email","address","postalcode","isadmin"]),
     });
   }
 

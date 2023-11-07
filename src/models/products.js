@@ -3,8 +3,8 @@ const timestamp = require('mongoose-timestamp');
 
 const productSchema = new mongoose.Schema({
   name: String,
-  price: Number,
-  numberOfLikes: Number,
+  price: String,
+  numberOfLikes: String,
   description: String
 });
 productSchema.plugin(timestamp);

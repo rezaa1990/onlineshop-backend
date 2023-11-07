@@ -42,6 +42,8 @@ module.exports = new (class extends controller {
     async deleteProduct(req,res){
       console.log(req.params.id);
       console.log(req.body);
+      const product = await this.Product.findById(req.params.id);
+      if(!product) return this.response({res, message: "محصولی یافت نشد  ", code:404, data: {}})
       const result = await this.Product.findByIdAndRemove(req.params.id);
       this.response({ res, message: "محصول حذف گردید", code:200, data: { result } });
     };
