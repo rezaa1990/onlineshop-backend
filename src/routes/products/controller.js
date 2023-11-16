@@ -13,12 +13,13 @@ module.exports = new (class extends controller {
       price:req.body.price,
       numberOfLikes:req.body.numberOfLikes,
       description:req.body.description,
+      imgPath:req.body.imgPath,
     });
     await product.save();
     this.response({
       res,
       message: "محصول با موفقیت ثبت شد",
-      data: _.pick(product, ["name", "price", "numberOfLikes","description"]),
+      data: _.pick(product, ["name", "price", "numberOfLikes","description" , "imgPath"]),
     });
   }
     async getProduct(req, res) {
@@ -34,7 +35,9 @@ module.exports = new (class extends controller {
         name: req.body.name,
         price: req.body.price,
         numberOfLike: req.body.numberOfLike,
-        description:req.body.description
+        description:req.body.description,
+        imgPath:req.body.imgPath,
+
       })
       this.response({ res, message: "مشخصات محصول بروزرسانی شد", code:200, data: { result } });
     };

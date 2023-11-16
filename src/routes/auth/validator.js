@@ -4,11 +4,11 @@ const check = expressValidator.check;
 module.exports = new class{
   registerValidator(){
     return [
-      check('fname')
+      check('fName')
       .not()
       .isEmpty()
       .withMessage('name cant be empty'),
-      check('lname')
+      check('lName')
       .not()
       .isEmpty()
       .withMessage('last name cant be empty'),
@@ -23,7 +23,7 @@ module.exports = new class{
       .not()
       .isEmpty()
       .withMessage('address cant be empty'),
-      check('postalcode')
+      check('postalCode')
       .not()
       .isEmpty()
       .withMessage('postalcode cant be empty'),

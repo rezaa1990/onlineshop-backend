@@ -1,15 +1,21 @@
+const { truncate } = require('lodash');
 const mongoose = require('mongoose');
 const timestamp = require('mongoose-timestamp');
+const Product = require('./products');
 
 const userSchema = new mongoose.Schema({
-  fname: { type: String, required: true},
-  lname: { type: String, required: true},
+  fName: { type: String, required: true},
+  lName: { type: String, required: true},
   mobile: { type: Number, required: true,unique:true},
   email: { type: String, required: true, unique: true},
   address: { type: String, required: true},
-  postalcode: { type: Number, required: true},
+  postalCode: { type: Number, required: true},
   isadmin: { type: Boolean, default: false},
-  password: { type: String, required: true},
+  password: {type:String , required:true},
+  basket:{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"Product"
+  }
 });
 userSchema.plugin(timestamp);
 

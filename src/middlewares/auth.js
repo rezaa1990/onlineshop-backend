@@ -5,11 +5,11 @@ const debug = require('debug')("app:main");
 
 async function isLoggined(req,res,next){
   const token = req.header('token1')
-  debug("token",token)
+  debug("token:",token)
   if(!token) res.status(401).send('access denied');
   try{
     const decoded = jwt.verify(token, config.get("jwt_key"));
-    const user = await User.findById(decoded._id);
+    const user = await User.findById(decoded._id).populate('basket');
     console.log(user);
     req.user = user;
     next();

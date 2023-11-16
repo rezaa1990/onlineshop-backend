@@ -12,4 +12,9 @@ router.get(
   controller.me
 );
 
+router.put(
+  '/updateuser/:id',
+  controller.updateUser
+);
+
 module.exports = router;

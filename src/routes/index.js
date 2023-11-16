@@ -9,7 +9,7 @@ const error = require('./../middlewares/error');
 
 router.use('/auth', authRouter);
 
-router.use('/user', isLoggined, userRouter);
+router.use('/user',isLoggined,userRouter);
 
 router.use('/admin', isLoggined, isAdmin, adminRouter);
 

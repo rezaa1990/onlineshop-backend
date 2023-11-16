@@ -16,6 +16,10 @@ module.exports = new class{
         .not()
         .isEmpty()
         .withMessage('توضیحات محصول نباید خالی باشد'),
+        check('imgPath')
+        .not()
+        .isEmpty()
+        .withMessage('تصویر محصول نباید خالی باشد'),
         
     ]
   }

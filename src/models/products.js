@@ -5,7 +5,8 @@ const productSchema = new mongoose.Schema({
   name: String,
   price: String,
   numberOfLikes: String,
-  description: String
+  description: String,
+  imgPath:String,
 });
 productSchema.plugin(timestamp);
 
