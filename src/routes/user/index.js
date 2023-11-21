@@ -17,4 +17,9 @@ router.put(
   controller.updateUser
 );
 
+router.put(
+  '/deletebasket',
+  controller.removeFromBasket
+);
+
 module.exports = router;
