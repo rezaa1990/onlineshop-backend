@@ -4,18 +4,18 @@ const timestamp = require('mongoose-timestamp');
 const Product = require('./products');
 
 const userSchema = new mongoose.Schema({
-  fName: { type: String, required: true},
-  lName: { type: String, required: true},
-  mobile: { type: Number, required: true,unique:true},
+  fName: { type: String,},
+  lName: { type: String,},
+  mobile: { type: Number,},
   email: { type: String, required: true, unique: true},
-  address: { type: String, required: true},
-  postalCode: { type: Number, required: true},
+  address: { type: String,},
+  postalCode: { type: Number,},
   isadmin: { type: Boolean, default: false},
   password: {type:String , required:true},
-  basket:{
+  basket:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Product"
-  }
+  }]
 });
 userSchema.plugin(timestamp);
 
