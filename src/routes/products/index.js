@@ -27,6 +27,22 @@ router.put(
   controller.updateProduct
 );
 
+router.put(
+  '/addlike/:id',
+  // isLoggined,
+  // isAdmin,
+  // validator.productsValidator(),
+  controller.validate,
+  controller.addLike
+);
+
+router.put(
+  '/addcomment',
+  // validator.productsValidator(),
+  controller.validate,
+  controller.addComment
+);
+
 router.delete(
   '/deleteproduct/:id',
   // isLoggined,
