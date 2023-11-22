@@ -22,11 +22,23 @@ module.exports = new (class extends controller {
       data: _.pick(product, ["name", "price","description" , "imgPath"]),
     });
   }
-    async getProduct(req, res) {
-      const products = await this.Product.find()
-      console.log(products)
-      this.response({ res, message: "همه ی محصولات", code:200, data: { products } });
-    }
+  async getProduct(req, res) {
+    const products = await this.Product.find()
+      .populate({
+        path: 'comments',
+        options: { sort: { createdAt: 1 } },
+      })
+      .populate({
+        path: 'comments',
+        populate: {
+          path: 'author',
+          model: 'User', // جایگزین کردن 'User' با نام مدل مورد نظر برای نویسندگان
+        },
+      });
+    console.log(products);
+    this.response({ res, message: "همه ی محصولات", code: 200, data: { products } });
+  }
+  
 
     async updateProduct(req,res){
       console.log(req.params.id);
