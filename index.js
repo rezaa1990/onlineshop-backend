@@ -1,6 +1,10 @@
 const express = require('express');
 const app = express();
 
+const bodyParser = require('body-parser');
+app.use(bodyParser.json({ limit: '10mb' })); // برای JSON داده‌ها
+app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' })); 
+
 const cors = require('cors');
 const corsOptions = {
   origin: 'http://localhost:3000', // آدرس مرورگر شما
