@@ -11,15 +11,14 @@ module.exports = new (class extends controller {
     const product = new this.Product({
       name:req.body.name,
       price:req.body.price,
-      // numberOfLikes:req.body.numberOfLikes,
       description:req.body.description,
-      imgPath:req.body.imgPath,
+      img:req.body.img,
     });
     await product.save();
     this.response({
       res,
       message: "محصول با موفقیت ثبت شد",
-      data: _.pick(product, ["name", "price","description" , "imgPath"]),
+      data: _.pick(product, ["name", "price","description" , "img"]),
     });
   }
   async getProduct(req, res) {
@@ -32,7 +31,7 @@ module.exports = new (class extends controller {
         path: 'comments',
         populate: {
           path: 'author',
-          model: 'User', // جایگزین کردن 'User' با نام مدل مورد نظر برای نویسندگان
+          model: 'User',
         },
       });
     console.log(products);
@@ -44,11 +43,11 @@ module.exports = new (class extends controller {
       console.log(req.params.id);
       console.log(req.body);
       const result = await this.Product.findByIdAndUpdate(req.params.id, {
-        name: req.body.name,
-        price: req.body.price,
-        numberOfLike: req.body.numberOfLike,
-        description:req.body.description,
-        imgPath:req.body.imgPath,
+        name: req.body.updateName,
+        price: req.body.updatePrice,
+        numberOfLike: req.body.updateNumberOfLikes,
+        description:req.body.updateDescription,
+        img:req.body.updateImg
 
       })
       this.response({ res, message: "مشخصات محصول بروزرسانی شد", code:200, data: { result } });
