@@ -3,6 +3,7 @@ const {validationResult} = require('express-validator');
 const User = require('./../models/user');
 const Product = require('./../models/products');
 const Comment = require('./../models/comments');
+const Message = require('./../models/message');
 
 module.exports = class {
   constructor() {
@@ -10,6 +11,7 @@ module.exports = class {
     this.User = User;
     this.Product = Product;
     this.Comment = Comment;
+    this.Message = Message;
   }
 
   validationBody(req,res){

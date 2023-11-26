@@ -51,7 +51,8 @@ module.exports = new (class extends controller {
         message: "invalid eamil or password",
       });
     }
+    const isAdmin = user.isadmin;
     const token = jwt.sign({ _id: user.id }, config.get("jwt_key"));
-    this.response({ res, message: "successfuly logged in", data: { token } });
+    this.response({ res, message: "successfuly logged in", data: { token,isAdmin} });
   }
 })();
