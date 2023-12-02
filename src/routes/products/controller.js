@@ -53,19 +53,32 @@ module.exports = new (class extends controller {
       this.response({ res, message: "مشخصات محصول بروزرسانی شد", code:200, data: { result } });
     };
 
-    async addLike(req,res){
-      // console.log(req.params.id);
-      // console.log(req.body);
-      const product = await this.Product.findById(req.params.id);
-      if(!product) return this.response({res, message: "محصولی یافت نشد  ", code:404, data: {}});
-      if(product.numberOfLikes.includes(req.body.userId)) return (this.response({res, message:'این محصول قبلا توسط شما لایک شده است', code:400, data: {}}))
-      console.log('product.numberOfLikes',product.numberOfLikes);
-      const numberOfLike = [...product.numberOfLikes,req.body.userId];
-      product.numberOfLikes=numberOfLike;
-      await product.save();
-      this.response({ res, message: "محصول لایک شد", code:200, data: {product} });
-
+    async addLike(req, res) {
+      try {
+        const product = await this.Product.findById(req.params.id);
+    
+        
+        const index = product.numberOfLikes.indexOf(req.body.userId);
+    
+        // اگر عنصر یافت شد
+        if (index !== -1) {
+          // حذف عنصر از آرایه
+          product.numberOfLikes.splice(index, 1);
+          await product.save();
+          return this.response({ res, message: "محصول آنلایک شد", code: 200, data: { product } });
+        }
+    
+        // اضافه کردن
+        const numberOfLike = [...product.numberOfLikes, req.body.userId];
+        product.numberOfLikes = numberOfLike;
+        await product.save();
+        return this.response({ res, message: "محصول لایک شد", code: 200, data: { product } });
+      } catch (error) {
+        console.error('Error in addLike:', error);
+        return this.response({ res, message: "خطا", code: 500, data: {} });
+      }
     };
+    
 
     async addComment(req,res){
       const product = await this.Product.findById(req.body.productId);
