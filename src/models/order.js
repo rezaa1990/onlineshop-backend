@@ -6,10 +6,10 @@ const timestamp = require('mongoose-timestamp');
 const orderSchema = new mongoose.Schema({
   FName: { type: String,},
   LName: { type: String,},
-  mobile: { type: Number,},
-  email: { type: String, required: true, unique: true},
+  mobile: { type: String,},
+  email: { type: String, required: true},
   address: { type: String,},
-  postalCode: { type: Number,},
+  postalCode: { type: String,},
   products:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Product"
