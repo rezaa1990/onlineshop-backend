@@ -5,10 +5,39 @@ const validator = require('./validator');
 const {isLoggined , isAdmin} = require('./../../middlewares/auth')
 
 router.post(
-  '/addcomment',
+  '/makecomment/:id',
+  isLoggined,
   validator.commentValidator(),
   controller.validate,
-  controller.addComment,
+  controller.makeComment,
+);
+
+router.delete(
+  '/deletecomment/:id',
+  isLoggined,
+  isAdmin,
+  controller.deleteComment
+);
+
+router.put(
+  '/approvecomment/:id',
+  isLoggined,
+  isAdmin,
+  controller.approveComment
+);
+
+router.put(
+  '/likecomment/:commentid/:userid',
+  isLoggined,
+  // isAdmin,
+  controller.likeComment
+);
+
+router.put(
+  '/replycomment/:id',
+  isLoggined,
+  // isAdmin,
+  controller.replyComment
 );
 
 // router.get(
@@ -34,11 +63,6 @@ router.post(
 //   controller.addLike
 // );
 
-// router.delete(
-//   '/deleteproduct/:id',
-//   // isLoggined,
-//   // isAdmin,
-//   controller.deleteProduct
-// );
+
 
 module.exports = router;

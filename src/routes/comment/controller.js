@@ -7,11 +7,12 @@ const { header } = require("express-validator");
 const fs = require('fs');
 
 module.exports = new (class extends controller {
-  async addComment(req, res) {
+  async makeComment(req, res) {
     const comment = new this.Comment({
-      author:req.body.author,
+      author:req.params.id,
       text:req.body.text,
     });
+    comment.isApproved = false;
     console.log('comment',comment)
     await comment.save();
     this.response({
@@ -20,47 +21,119 @@ module.exports = new (class extends controller {
       data:comment,
     });
   }
-    // async getProduct(req, res) {
-    //   const products = await this.Product.find()
-    //   console.log(products)
-    //   this.response({ res, message: "همه ی محصولات", code:200, data: { products } });
-    // }
 
-    // async updateProduct(req,res){
-    //   console.log(req.params.id);
-    //   console.log(req.body);
-    //   const result = await this.Product.findByIdAndUpdate(req.params.id, {
-    //     name: req.body.name,
-    //     price: req.body.price,
-    //     numberOfLike: req.body.numberOfLike,
-    //     description:req.body.description,
-    //     imgPath:req.body.imgPath,
+  async deleteComment(req, res) {
+    try {
+      const deletedComment = await this.Comment.findByIdAndDelete(req.params.id);
+  
+      if (!deletedComment) {
+        return this.response({
+          res,
+          message: "کامنتی با این مشخصات یافت نشد",
+          data: {}
+        });
+      }
+  
+      this.response({
+        res,
+        message: "کامنت با موفقیت حذف شد",
+        data: deletedComment
+      });
+    } catch (error) {
+      this.response({
+        res,
+        message: "خطا در حذف کامنت",
+        data: {}
+      });
+    }
+  }
+  
+  async approveComment(req, res) {
+    try {
+      const updatedComment = await this.Comment.findByIdAndUpdate(
+        req.params.id,
+        { isApproved: true },
+        { new: true }
+      );
+  
+      if (!updatedComment) {
+        return this.response({
+          res,
+          message: "کامنتی با این مشخصات یافت نشد",
+          data: {}
+        });
+      }
+  
+      this.response({
+        res,
+        message: "کامنت با موفقیت تایید شد",
+        data: updatedComment
+      });
+    } catch (error) {
+      this.response({
+        res,
+        message: "خطا در تایید کامنت",
+        data: {}
+      });
+    }
+  }
 
-    //   })
-    //   this.response({ res, message: "مشخصات محصول بروزرسانی شد", code:200, data: { result } });
-    // };
+ 
+  async likeComment(req, res) {
+    try {
+      const comment = await this.Comment.findById(req.params.commentid);
+      if (!comment) {
+        return this.response({
+          res,
+          message: "کامنتی با این مشخصات یافت نشد",
+          data: {}
+        });
+      }
+  
+      comment.likes.push(req.params.userid);
+      const updatedComment = await comment.save();
+  
+      this.response({
+        res,
+        message: "کامنت با موفقیت لایک شد",
+        data: updatedComment
+      });
+    } catch (error) {
+      this.response({
+        res,
+        message: "خطا در لایک کردن کامنت",
+        data: {}
+      });
+    }
+  }
 
-    // async addLike(req,res){
-    //   // console.log(req.params.id);
-    //   // console.log(req.body);
-    //   const product = await this.Product.findById(req.params.id);
-    //   if(!product) return this.response({res, message: "محصولی یافت نشد  ", code:404, data: {}});
-    //   if(product.numberOfLikes.includes(req.body.userId)) return (this.response({res, message:'این محصول قبلا توسط شما لایک شده است', code:400, data: {}}))
-    //   console.log('product.numberOfLikes',product.numberOfLikes);
-    //   const numberOfLike = [...product.numberOfLikes,req.body.userId];
-    //   product.numberOfLikes=numberOfLike;
-    //   await product.save();
-    //   this.response({ res, message: "محصول لایک شد", code:200, data: {product} });
-
-    // };
-
-    // async deleteProduct(req,res){
-    //   console.log(req.params.id);
-    //   console.log(req.body);
-    //   const product = await this.Product.findById(req.params.id);
-    //   if(!product) return this.response({res, message: "محصولی یافت نشد  ", code:404, data: {}})
-    //   const result = await this.Product.findByIdAndRemove(req.params.id);
-    //   this.response({ res, message: "محصول حذف گردید", code:200, data: { result } });
-    // };
+  async replyComment(req, res) {
+    console.log(req.body.replyComment,req.params.id)
+    try {
+      const comment = await this.Comment.findById(req.params.id);
+      if (!comment) {
+        return this.response({
+          res,
+          message: "کامنتی با این مشخصات یافت نشد",
+          data: {}
+        });
+      }
+  
+      comment.reply.push(req.body.replyComment);
+      const updatedComment = await comment.save();
+  
+      this.response({
+        res,
+        message: "ریپلای با موفقیت ثبت شد",
+        data: updatedComment
+      });
+    } catch (error) {
+      this.response({
+        res,
+        message: "خطا در ریپلای کردن کامنت",
+        data: {}
+      });
+    }
+  }
 
 })();
