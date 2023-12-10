@@ -4,22 +4,26 @@ const check = expressValidator.check;
 module.exports = new class{
   productsValidator(){
     return [
+      check('category')
+        .not()
+        .isEmpty()
+        .withMessage('دسته بندی محصول نباید خالی باشد'),
       check('name')
         .not()
         .isEmpty()
         .withMessage('نام محصول نباید خالی باشد'),
-        check('price')
+      check('price')
         .not()
         .isEmpty()
         .withMessage('قیمت محصول نباید خالی باشد'),
-        check('description')
+      check('numberOfProduct')
         .not()
         .isEmpty()
-        .withMessage('توضیحات محصول نباید خالی باشد'),
-        check('img')
+        .withMessage('تعداد موجودی محصول نباید خالی باشد'),
+      check('serialNumber')
         .not()
         .isEmpty()
-        .withMessage('تصویر محصول نباید خالی باشد'),
+        .withMessage('شماره سریال محصول نباید خالی باشد'),
         
     ]
   }

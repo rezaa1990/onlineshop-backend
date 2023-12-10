@@ -6,8 +6,8 @@ const {isLoggined , isAdmin} = require('./../../middlewares/auth')
 
 router.post(
   '/addproduct',
-  // isLoggined,
-  // isAdmin,
+  isLoggined,
+  isAdmin,
   validator.productsValidator(),
   controller.validate,
   controller.addProduct,
@@ -20,16 +20,16 @@ router.get(
 
 router.put(
   '/updateproduct/:id',
-  // isLoggined,
-  // isAdmin,
-  validator.productsValidator(),
+  isLoggined,
+  isAdmin,
+  // validator.productsValidator(),
   controller.validate,
   controller.updateProduct
 );
 
 router.put(
   '/addlike/:id',
-  // isLoggined,
+  isLoggined,
   // isAdmin,
   // validator.productsValidator(),
   controller.validate,
@@ -37,17 +37,31 @@ router.put(
 );
 
 router.put(
-  '/addcomment',
-  // validator.productsValidator(),
+  '/addcomment/:id',
+  isLoggined,
   controller.validate,
   controller.addComment
 );
 
 router.delete(
   '/deleteproduct/:id',
-  // isLoggined,
-  // isAdmin,
+  isLoggined,
+  isAdmin,
   controller.deleteProduct
+);
+
+router.put(
+  '/adddiscount',
+  isLoggined,
+  isAdmin,
+  controller.addDiscount
+);
+
+router.put(
+  '/removediscount',
+  isLoggined,
+  isAdmin,
+  controller.removeDiscount
 );
 
 module.exports = router;
