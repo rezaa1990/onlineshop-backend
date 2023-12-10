@@ -5,6 +5,7 @@ const Product = require('./../models/products');
 const Comment = require('./../models/comments');
 const Message = require('./../models/message');
 const Order = require('./../models/order');
+const Discount = require('./../models/discount');
 
 module.exports = class {
   constructor() {
@@ -14,6 +15,7 @@ module.exports = class {
     this.Comment = Comment;
     this.Message = Message;
     this.Order = Order;
+    this.Discount = Discount;
   }
 
   validationBody(req,res){
@@ -23,7 +25,7 @@ module.exports = class {
       const messages = [];
       errors.forEach(err => messages.push(err.msg));
       res.status(400).json({
-        message: 'validation error',
+        message: 'خطای اعتبار سنجی',
         data: messages
       })
       return false;
