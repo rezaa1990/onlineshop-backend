@@ -5,48 +5,18 @@ const validator = require('./validator');
 
 router.post(
   '/addorder',
-  // isLoggined,
-  // isAdmin,
-  validator.orderValidator(),
-  controller.validate,
+
+  // validator.order(),
+  // controller.validate,
   controller.addOrder,
 );
 
-// router.get(
-//   '/getproducts',
-//   controller.getProduct
-// );
+router.put(
+  '/addpostalinformation/:id',
 
-// router.put(
-//   '/updateproduct/:id',
-//   // isLoggined,
-//   // isAdmin,
-//   validator.productsValidator(),
-//   controller.validate,
-//   controller.updateProduct
-// );
-
-// router.put(
-//   '/addlike/:id',
-//   // isLoggined,
-//   // isAdmin,
-//   // validator.productsValidator(),
-//   controller.validate,
-//   controller.addLike
-// );
-
-// router.put(
-//   '/addcomment',
-//   // validator.productsValidator(),
-//   controller.validate,
-//   controller.addComment
-// );
-
-// router.delete(
-//   '/deleteproduct/:id',
-//   // isLoggined,
-//   // isAdmin,
-//   controller.deleteProduct
-// );
+  // validator.postalInformation(),
+  // controller.validate,
+  controller.addPostalInformation,
+);
 
 module.exports = router;

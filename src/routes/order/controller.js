@@ -8,89 +8,92 @@ const fs = require('fs');
 
 module.exports = new (class extends controller {
   async addOrder(req, res) {
-    const order = new this.Order({
-      Fname:req.body.Fname,
-      LName:req.body.Lname,
-      mobile:req.body.mobile,
-      email:req.body.email,
-      address:req.body.address,
-      postalCode:req.body.postalCode,
-      products:req.body.productsId,
-    });
-    await order.save();
-    const purchaseInvoice =await this.Order.findById(order._id).populate({
-      path: "products",
-      select: "name price -_id",
-    });
+    try {
+      const productsId = req.body.productsId;
+      const numberOfEachProductInBasket = req.body.numberOfEachProductInBasket;
 
-    this.response({
-      res,
-      message: "سفارش با موفقیت ثبت شد",
-      data: purchaseInvoice,
-    });
-  }
-  // async getProduct(req, res) {
-  //   const products = await this.Product.find()
-  //     .populate({
-  //       path: 'comments',
-  //       options: { sort: { createdAt: 1 } },
-  //     })
-  //     .populate({
-  //       path: 'comments',
-  //       populate: {
-  //         path: 'author',
-  //         model: 'User',
-  //       },
-  //     });
-  //   console.log(products);
-  //   this.response({ res, message: "همه ی محصولات", code: 200, data: { products } });
-  // }
+      const order = new this.Order({
+        productsId,
+        numberOfEachProductInBasket,
+        isFactorMade: true,
+        postalInformation : false,
+        payment:false,
+        sendToPost:false,
+      });
+      await order.save();
+
+      let totalPrice = 0;
+      const factors = [];
+      for (let i = 0; i < productsId.length; i++) {
+        const product = await this.Product.findById(productsId[i]);
+        const populatedProduct = await product.populate();
   
+        const productName = populatedProduct.name;
+        const numberOfEachProduct = parseInt(numberOfEachProductInBasket[i]);
+        const pricePerUnit = parseInt(populatedProduct.price);
+        const priceMNumber = pricePerUnit * numberOfEachProduct;
+        totalPrice += priceMNumber; // Add the priceMNumber to totalPrice
+  
+        const factor = {
+          productName,
+          numberOfEachProduct,
+          pricePerUnit,
+          priceMNumber,
+        };
+  
+        factors.push(factor);
+      }
+  
+      this.response({
+        res,
+        message: "فاکتورها ساخته شدند و آماده دریافت اطلاعات تماس مشتری می‌باشند",
+        data: {
+          factors,
+          totalPrice,
+          order
+        },
+      });
+  
+    } catch (error) {
+      this.response({
+        res,
+        message: "خطا در ساخت فاکتور",
+        data: {},
+      });
+    }
+  }
 
-  //   async updateProduct(req,res){
-  //     console.log(req.params.id);
-  //     console.log(req.body);
-  //     const result = await this.Product.findByIdAndUpdate(req.params.id, {
-  //       name: req.body.updateName,
-  //       price: req.body.updatePrice,
-  //       numberOfLike: req.body.updateNumberOfLikes,
-  //       description:req.body.updateDescription,
-  //       img:req.body.updateImg
-
-  //     })
-  //     this.response({ res, message: "مشخصات محصول بروزرسانی شد", code:200, data: { result } });
-  //   };
-
-  //   async addLike(req,res){
-  //     // console.log(req.params.id);
-  //     // console.log(req.body);
-  //     const product = await this.Product.findById(req.params.id);
-  //     if(!product) return this.response({res, message: "محصولی یافت نشد  ", code:404, data: {}});
-  //     if(product.numberOfLikes.includes(req.body.userId)) return (this.response({res, message:'این محصول قبلا توسط شما لایک شده است', code:400, data: {}}))
-  //     console.log('product.numberOfLikes',product.numberOfLikes);
-  //     const numberOfLike = [...product.numberOfLikes,req.body.userId];
-  //     product.numberOfLikes=numberOfLike;
-  //     await product.save();
-  //     this.response({ res, message: "محصول لایک شد", code:200, data: {product} });
-
-  //   };
-
-  //   async addComment(req,res){
-  //     const product = await this.Product.findById(req.body.productId);
-  //     if(!product) return this.response({res, message: "محصولی یافت نشد  ", code:404, data: {}});
-  //     product.comments = [...product.comments,req.body.commentId];
-  //     await product.save();
-  //     this.response({ res, message: "نظر شما ثبت شد", code:200, data: {product} });
-
-  //   };
-
-  //   async deleteProduct(req,res){
-  //     console.log(req.params.id);
-  //     console.log(req.body);
-  //     const product = await this.Product.findById(req.params.id);
-  //     if(!product) return this.response({res, message: "محصولی یافت نشد  ", code:404, data: {}})
-  //     const result = await this.Product.findByIdAndRemove(req.params.id);
-  //     this.response({ res, message: "محصول حذف گردید", code:200, data: { result } });
-  //   };
-
+  async addPostalInformation(req, res) {
+    try {
+      console.log(req.params.id)
+      const order = await this.Order.findById(req.params.id);
+      order.FName = req.body.FName;
+      order.LName = req.body.LName;
+      order.mobile = req.body.mobile;
+      order.email = req.body.email;
+      order.address = req.body.address;
+      order.postalCode = req.body.postalCode;
+      isFactorMade: true,
+      order.postalInformation = true;
+      order.payment = false;
+      order.sendToPost = false;
+      await order.save();
+      this.response({
+        res,
+        message: "‌اطلاعات پستی دریافت شد و سفارش آماده ی پرداخت نهایی میباشد",
+        data: {
+          order
+        },
+      });
+  
+    } catch (error) {
+      this.response({
+        res,
+        message: "خطا در ساخت فاکتور",
+        data: {},
+      });
+    }
+  }
+  
+  
 })();

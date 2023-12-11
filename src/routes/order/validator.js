@@ -2,7 +2,18 @@ const expressValidator = require('express-validator');
 const check = expressValidator.check;
 
 module.exports = new class{
-  orderValidator(){
+
+  order(){
+    return [
+      check('productsId')
+        .not()
+        .isEmpty()
+        .withMessage('سبد خرید خالی است'),
+
+    ]
+  }
+
+  postalInformation(){
     return [
       check('FName')
         .not()
@@ -16,6 +27,10 @@ module.exports = new class{
         .not()
         .isEmpty()
         .withMessage(' ایمیل خریدار نباید خالی باشد'),
+        check('email')
+        .not()
+        .isEmail()
+        .withMessage('ایمیل صحیح نیست'),
         check('mobile')
         .not()
         .isEmpty()

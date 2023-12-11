@@ -4,18 +4,21 @@ const timestamp = require('mongoose-timestamp');
 
 
 const orderSchema = new mongoose.Schema({
-  FName: { type: String,},
-  LName: { type: String,},
-  mobile: { type: String,},
-  email: { type: String, required: true},
-  address: { type: String,},
-  postalCode: { type: String,},
-  products:[{
+  productsId:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Product"
   }],
-  sendToPost:{type:Boolean,default:false},
+  numberOfEachProductInBasket:[{type:String, default:"1"}],
+  FName: { type: String,},
+  LName: { type: String,},
+  mobile: { type: String,},
+  email: { type: String,},
+  address: { type: String,},
+  postalCode: { type: String,},
+  isFactorMade:{type:Boolean,default:false},
+  postalInformation:{type:Boolean,default:false},
   payment:{type:Boolean,default:false},
+  sendToPost:{type:Boolean,default:false},
 });
 orderSchema.plugin(timestamp);
 
