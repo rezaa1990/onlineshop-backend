@@ -8,8 +8,8 @@ router.post(
   '/creatediscount',
   isLoggined,
   isAdmin,
-  // validator.commentValidator(),
-  // controller.validate,
+  validator.discountValidator(),
+  controller.validate,
   controller.makeDiscount,
 );
 

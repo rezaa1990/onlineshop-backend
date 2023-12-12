@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const timestamp = require('mongoose-timestamp');
 
 const discountSchema = new mongoose.Schema({
-  type: { type: String, enum: ['percentage', 'amount'], required: true },
-  value: { type: Number, required: true },
-  expirationTime: { type: Number, required: true },
+  type: { type: String, enum: ['percentage', 'amount']},
+  value: { type: Number},
+  expirationTime: { type: Number,},
   isActive: { type: Boolean, default: false },
 });
 discountSchema.plugin(timestamp);

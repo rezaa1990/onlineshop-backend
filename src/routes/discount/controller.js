@@ -13,7 +13,7 @@ module.exports = new (class extends controller {
       value:req.body.value,
       expirationTime:req.body.expirationTime,
     });
-    discount.isActive = false;
+    discount.isActive = true;
     await discount.save();
     this.response({
       res,

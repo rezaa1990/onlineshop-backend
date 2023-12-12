@@ -54,6 +54,8 @@ router.put(
   '/adddiscount',
   isLoggined,
   isAdmin,
+  validator.addDiscount(),
+  controller.validate,
   controller.addDiscount
 );
 

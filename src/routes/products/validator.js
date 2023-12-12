@@ -27,4 +27,17 @@ module.exports = new class{
         
     ]
   }
+
+  addDiscount(){
+    return [
+      check('selectedProducts')
+        .not()
+        .isEmpty()
+        .withMessage('محصولی برای ایجاد تخفیف انتخاب نشده'),
+        check('discountId')
+        .not()
+        .isEmpty()
+        .withMessage('تخفیف مشخص نشده'),
+    ]
+  }
 }
