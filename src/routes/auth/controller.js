@@ -12,25 +12,27 @@ module.exports = new (class extends controller {
       return this.response({
         res,
         code: 400,
-        message: "this user already registered",
+        message: "این یوزر قبلا ثبت نام کرده است",
       });
     }
-    // const {email, name, password} = req.body;
-    // user = new this.User({email, name, password});
+    if(req.body.password !== req.body.repeatPassword){
+      return this.response({
+        res,
+        code: 401,
+        message: "مقادیر رمز عبور و تکرار آن برابر نیستند",
+      });
+    }
     const salt = await bcrypt.genSalt(10);
     console.log(req.body);
     const password = await bcrypt.hash(req.body.password, salt);
-    user = new this.User(_.pick(req.body, ["fName", "lName", "mobile", "email","address","postalCode","isadmin"]));
+    user = new this.User(_.pick(req.body, ["fName", "mobile", "email","password"]));
+    user.role = "normalUser"
     user.password=password;
-
-
-
     await user.save();
-
     this.response({
       res,
-      message: "the user successfuly registered",
-      data: _.pick(user, ["fname", "lname", "mobile", "email","address","postalcode","isadmin"]),
+      message: "ثبت نام با موفقیت انجام شد",
+      data: _.pick(user, ["fname", "mobile", "email"]),
     });
   }
 
@@ -51,8 +53,7 @@ module.exports = new (class extends controller {
         message: "invalid eamil or password",
       });
     }
-    const isAdmin = user.isadmin;
     const token = jwt.sign({ _id: user.id }, config.get("jwt_key"));
-    this.response({ res, message: "successfuly logged in", data: { token,isAdmin} });
+    this.response({ res, message: "successfuly logged in", data: { token} });
   }
 })();

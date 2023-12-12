@@ -7,30 +7,35 @@ module.exports = new class{
       check('fName')
       .not()
       .isEmpty()
-      .withMessage('name cant be empty'),
-      check('lName')
-      .not()
-      .isEmpty()
-      .withMessage('last name cant be empty'),
+      .withMessage(' نام کاربر اجباری است.'),
+
       check('mobile')
       .not()
       .isEmpty()
-      .withMessage('mobile number cant be empty'),
+      .withMessage('شماره موبایل الزامی است.'),
+
       check('email')
       .isEmail()
-      .withMessage('email is invalid'),
-      check('address')
+      .withMessage('آدرس ایمیل معتبر نیست. '),
+
+      check('email')
       .not()
       .isEmpty()
-      .withMessage('address cant be empty'),
-      check('postalCode')
-      .not()
-      .isEmpty()
-      .withMessage('postalcode cant be empty'),
+      .withMessage('آدرس ایمیل الزامی است.'),
+
       check('password')
       .not()
       .isEmpty()
-      .withMessage('password cant be empty'),
+      .withMessage('پسورد الزامی است. ')
+      .isLength({ min: 6, max: 20 })
+      .withMessage('رمز عبور باید حداقل ۶ و حداکثر ۲۰ کاراکتر باشد.')
+      .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+      .withMessage('رمز عبور باید شامل حروف بزرگ و کوچک، اعداد و علائم باشد.'),
+
+      check('repeatPassword')
+      .not()
+      .isEmpty()
+      .withMessage('.تکرار پسورد الزامی است')
     ]
   }
 
