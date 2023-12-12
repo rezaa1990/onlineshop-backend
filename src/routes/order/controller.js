@@ -11,34 +11,47 @@ module.exports = new (class extends controller {
     try {
       const productsId = req.body.productsId;
       const numberOfEachProductInBasket = req.body.numberOfEachProductInBasket;
-
+  
       const order = new this.Order({
         productsId,
         numberOfEachProductInBasket,
         isFactorMade: true,
-        postalInformation : false,
-        payment:false,
-        sendToPost:false,
+        postalInformation: false,
+        payment: false,
+        sendToPost: false,
       });
       await order.save();
-
+  
       let totalPrice = 0;
       const factors = [];
       for (let i = 0; i < productsId.length; i++) {
         const product = await this.Product.findById(productsId[i]);
-        const populatedProduct = await product.populate();
-  
-        const productName = populatedProduct.name;
+        const discount =  await this.Discount.findById(product.discount);
+        console.log('product',product)
+        console.log('discount',discount)
+        
+        
+        const productName = product.name;
         const numberOfEachProduct = parseInt(numberOfEachProductInBasket[i]);
-        const pricePerUnit = parseInt(populatedProduct.price);
+        let pricePerUnit = parseInt(product.price);
+        if (discount && discount.isActive === true) {
+          if (discount.type === "percentage") {
+            pricePerUnit *= (1 - discount.value);
+          } else {
+            pricePerUnit -= discount.value;
+          }
+        }
+  
         const priceMNumber = pricePerUnit * numberOfEachProduct;
-        totalPrice += priceMNumber; // Add the priceMNumber to totalPrice
+        totalPrice += priceMNumber;
   
         const factor = {
           productName,
           numberOfEachProduct,
           pricePerUnit,
           priceMNumber,
+          discount:discount.value,
+          
         };
   
         factors.push(factor);
@@ -50,7 +63,7 @@ module.exports = new (class extends controller {
         data: {
           factors,
           totalPrice,
-          order
+          order,
         },
       });
   
@@ -62,10 +75,13 @@ module.exports = new (class extends controller {
       });
     }
   }
+  
+  
 
   async addPostalInformation(req, res) {
     try {
       console.log(req.params.id)
+      console.log("addpostalcode",req.body)
       const order = await this.Order.findById(req.params.id);
       order.FName = req.body.FName;
       order.LName = req.body.LName;
