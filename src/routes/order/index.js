@@ -6,16 +6,15 @@ const validator = require('./validator');
 router.post(
   '/addorder',
 
-  // validator.order(),
-  // controller.validate,
+  validator.order(),
+  controller.validate,
   controller.addOrder,
 );
 
 router.put(
   '/addpostalinformation/:id',
-
-  // validator.postalInformation(),
-  // controller.validate,
+  validator.postalInformation(),
+  controller.validate,
   controller.addPostalInformation,
 );
 

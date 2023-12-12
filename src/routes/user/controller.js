@@ -15,6 +15,7 @@ module.exports = new (class extends controller {
     const user = await this.User.findById(req.params.id);
     if(user.basket.includes(req.body.productId)) return (this.response({res,message:'این محصول در سبد شما موجود است'}))
     user.basket=[...user.basket,req.body.productId]
+    user.numberOfEachProductInBasket=[...user.numberOfEachProductInBasket,req.body.numberOfproduct];
     console.log(user);
     await user.save();
     this.response({ res, message: "محصول به سبد شما افزوده شد", code:200, data: { user } });

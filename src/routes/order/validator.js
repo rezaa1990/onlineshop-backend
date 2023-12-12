@@ -28,7 +28,6 @@ module.exports = new class{
         .isEmpty()
         .withMessage(' ایمیل خریدار نباید خالی باشد'),
         check('email')
-        .not()
         .isEmail()
         .withMessage('ایمیل صحیح نیست'),
         check('mobile')
