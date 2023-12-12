@@ -8,6 +8,7 @@ const messageRouter = require('./message');
 const orderRouter = require('./order');
 const discountRouter = require('./discount');
 const commentRouter = require('./comment');
+const imageRouter = require('./image');
 const {isLoggined , isAdmin} = require('./../middlewares/auth')
 const error = require('./../middlewares/error');
 
@@ -26,6 +27,8 @@ router.use('/message',messageRouter);
 router.use('/order',orderRouter);
 
 router.use('/discount',discountRouter);
+
+router.use('/image',imageRouter);
 
 router.use(error);
 

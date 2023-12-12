@@ -6,6 +6,7 @@ const Comment = require('./../models/comments');
 const Message = require('./../models/message');
 const Order = require('./../models/order');
 const Discount = require('./../models/discount');
+const Image = require('./../models/image');
 
 module.exports = class {
   constructor() {
@@ -16,6 +17,7 @@ module.exports = class {
     this.Message = Message;
     this.Order = Order;
     this.Discount = Discount;
+    this.Image = Image;
   }
 
   validationBody(req,res){
