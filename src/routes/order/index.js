@@ -5,7 +5,6 @@ const validator = require('./validator');
 
 router.post(
   '/addorder',
-
   validator.order(),
   controller.validate,
   controller.addOrder,

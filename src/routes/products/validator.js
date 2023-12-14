@@ -16,15 +16,24 @@ module.exports = new class{
         .not()
         .isEmpty()
         .withMessage('قیمت محصول نباید خالی باشد'),
+        check('price')
+        .isNumeric()
+        .withMessage('قیمت محصول باید عدد باشد'),
       check('numberOfProduct')
         .not()
         .isEmpty()
         .withMessage('تعداد موجودی محصول نباید خالی باشد'),
-      check('serialNumber')
+        check('numberOfProduct')
+        .isNumeric()
+        .withMessage('تعداد محصول باید عدد باشد'),
+      check('description')
+        .not()
+        .isEmpty()
+        .withMessage('توضیحات محصول نباید خالی باشد'),
+        check('serialNumber')
         .not()
         .isEmpty()
         .withMessage('شماره سریال محصول نباید خالی باشد'),
-        
     ]
   }
 
@@ -38,6 +47,15 @@ module.exports = new class{
         .not()
         .isEmpty()
         .withMessage('تخفیف مشخص نشده'),
+    ]
+  }
+
+  likeValidator(){
+    return [
+      check('id')
+        .not()
+        .isEmpty()
+        .withMessage('کاربری یافت نشد'),
     ]
   }
 }

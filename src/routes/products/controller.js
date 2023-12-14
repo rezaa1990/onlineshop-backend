@@ -57,23 +57,23 @@ module.exports = new (class extends controller {
       const productId = req.params.id;
       const updateFields = {};
 
-      if (req.body.updateCategory) {
-        updateFields.category = req.body.updateCategory;
+      if (req.body.category) {
+        updateFields.category = req.body.category;
       }
-      if (req.body.updateName) {
-        updateFields.name = req.body.updateName;
+      if (req.body.name) {
+        updateFields.name = req.body.name;
       }
-      if (req.body.updateImages) {
-        updateFields.image = req.body.updateImages;
+      if (req.body.images) {
+        updateFields.image = req.body.images;
       }
-      if (req.body.updatePrice) {
-        updateFields.price = req.body.updatePrice;
+      if (req.body.price) {
+        updateFields.price = req.body.price;
       }
-      if (req.body.updateDescription) {
-        updateFields.description = req.body.updateDescription;
+      if (req.body.description) {
+        updateFields.description = req.body.description;
       }
-      if (req.body.updateNumberOfProduct) {
-        updateFields.numberOfProduct = req.body.updateNumberOfProduct;
+      if (req.body.numberOfProduct) {
+        updateFields.numberOfProduct = req.body.numberOfProduct;
       }
 
   

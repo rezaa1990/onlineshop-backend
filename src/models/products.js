@@ -3,9 +3,9 @@ const timestamp = require('mongoose-timestamp');
 const { Stream } = require('winston/lib/winston/transports');
 
 const productSchema = new mongoose.Schema({
-  category:{type:String,required:true},
+  category:{type:String},
 
-  name: {type:String,required:true},
+  name: {type:String},
 
   images:
     [
@@ -28,11 +28,11 @@ const productSchema = new mongoose.Schema({
     ref:"َArticle"
     }],
 
-  price: {type:String,required:true},
+  price: {type:String},
 
   rate:String,
 
-  description:[{type:String},{required:true}],
+  description:{type:String},
 
   numberOfProduct:{type:String,required:true},
 

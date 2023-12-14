@@ -2,25 +2,23 @@ const expressValidator = require('express-validator');
 const check = expressValidator.check;
 
 module.exports = new class{
-  productsValidator(){
+  messageValidator(){
     return [
-      check('name')
+      check('senderName')
         .not()
         .isEmpty()
-        .withMessage('نام محصول نباید خالی باشد'),
-        check('price')
+        .withMessage('نام فرستنده خالی است'),
+        check('senderEmail')
         .not()
         .isEmpty()
-        .withMessage('قیمت محصول نباید خالی باشد'),
-        check('description')
+        .withMessage('ایمیل خالی است'),
+        check('senderEmail')
+        .isEmail()
+        .withMessage('ایمیل صحیح نیست'),
+        check('content')
         .not()
         .isEmpty()
-        .withMessage('توضیحات محصول نباید خالی باشد'),
-        check('img')
-        .not()
-        .isEmpty()
-        .withMessage('تصویر محصول نباید خالی باشد'),
-        
+        .withMessage('پیِام خالی است'),
     ]
   }
 }
