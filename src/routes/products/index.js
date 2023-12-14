@@ -22,7 +22,7 @@ router.put(
   '/updateproduct/:id',
   isLoggined,
   isAdmin,
-  // validator.productsValidator(),
+  validator.productsValidator(),
   controller.validate,
   controller.updateProduct
 );
@@ -30,8 +30,7 @@ router.put(
 router.put(
   '/addlike/:id',
   isLoggined,
-  // isAdmin,
-  // validator.productsValidator(),
+  validator.likeValidator(),
   controller.validate,
   controller.addLike
 );
