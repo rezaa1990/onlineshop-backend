@@ -7,9 +7,15 @@ const commentSchema = new mongoose.Schema({
     ref:"َUser"
   }],
   text: String,
+
   date: { type: Date, default: Date.now },
+
   isApproved:{type:Boolean,default:false},
-  reply: [],
+
+  reply: [{
+    type:mongoose.Schema.Types.ObjectId,
+    ref:"َComment"}],
+
   likes:[{
     type:mongoose.Schema.Types.ObjectId,
     ref:"َUser"

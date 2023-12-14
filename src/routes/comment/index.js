@@ -29,40 +29,22 @@ router.put(
 router.put(
   '/likecomment/:commentid/:userid',
   isLoggined,
-  // isAdmin,
   controller.likeComment
 );
 
-router.put(
-  '/replycomment/:id',
+router.post(
+  '/makereplycomment',
   isLoggined,
-  // isAdmin,
-  controller.replyComment
+  controller.validate,
+  controller.makeReplyComment
 );
 
-// router.get(
-//   '/getproducts',
-//   controller.getProduct
-// );
 
-// router.put(
-//   '/updateproduct/:id',
-//   // isLoggined,
-//   // isAdmin,
-//   validator.productsValidator(),
-//   controller.validate,
-//   controller.updateProduct
-// );
-
-// router.put(
-//   '/addlike/:id',
-//   // isLoggined,
-//   // isAdmin,
-//   // validator.productsValidator(),
-//   controller.validate,
-//   controller.addLike
-// );
-
-
+router.put(
+  '/addReplyComment',
+  isLoggined,
+  controller.validate,
+  controller.addReplyComment
+);
 
 module.exports = router;

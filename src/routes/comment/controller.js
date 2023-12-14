@@ -22,6 +22,52 @@ module.exports = new (class extends controller {
     });
   }
 
+  async makeReplyComment(req, res) {
+    const comment = new this.Comment({
+      author:req.body.author,
+      text:req.body.text,
+    });
+    comment.isApproved = false;
+    console.log('comment',comment)
+    await comment.save();
+    this.response({
+      res,
+      message: ";نظر شما با موفقیت ساخته شد",
+      data:comment,
+    });
+  }
+
+  async addReplyComment(req, res) {
+    try {
+      const comment = await this.Comment.findById(req.body.commentId);
+      if (!comment) {
+        return this.response({
+          res,
+          message: "نظر مورد نظر یافت نشد",
+          data: null,
+        });
+      }
+  
+      comment.reply.push(req.body.replyCommentId);
+      comment.isApproved = false;
+  
+      await comment.save();
+      
+      this.response({
+        res,
+        message: "نظر شما با موفقیت ریپلای شد",
+        data: comment,
+      });
+    } catch (error) {
+      this.response({
+        res,
+        message: "خطا در اضافه کردن پاسخ به نظر",
+        data: {},
+      });
+    }
+  }
+  
+
   async deleteComment(req, res) {
     try {
       const deletedComment = await this.Comment.findByIdAndDelete(req.params.id);
