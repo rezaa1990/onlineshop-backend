@@ -10,7 +10,8 @@ async function isLoggined(req,res,next){
   if(!token) return res.status(401).send('توکن نامعتبر است');
   try{
     const decoded = jwt.verify(token, config.get("jwt_key"));
-    const user = await User.findById(decoded._id).populate('basket');
+    const user = await User.findById(decoded._id)
+    .populate('basket');
     console.log(user);
     req.user = user;
     next();

@@ -8,6 +8,7 @@ const fs = require('fs');
 
 module.exports = new (class extends controller {
   async addOrder(req, res) {
+    console.log("orderfactorbody:",req.body)
     try {
       const productsId = req.body.productsId;
       const numberOfEachProductInBasket = req.body.numberOfEachProductInBasket;
@@ -27,6 +28,7 @@ module.exports = new (class extends controller {
       for (let i = 0; i < productsId.length; i++) {
         const product = await this.Product.findById(productsId[i]);
         const discount =  await this.Discount.findById(product.discount);
+        const discountValue = discount?.value; 
         console.log('product',product)
         console.log('discount',discount)
         
@@ -50,8 +52,7 @@ module.exports = new (class extends controller {
           numberOfEachProduct,
           pricePerUnit,
           priceMNumber,
-          discount:discount.value,
-          
+          discount:discountValue,
         };
   
         factors.push(factor);

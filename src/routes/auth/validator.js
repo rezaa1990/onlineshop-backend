@@ -43,11 +43,11 @@ module.exports = new class{
     return [
       check('email')
         .isEmail()
-        .withMessage('email is invalid'),
+        .withMessage('ایمیل صحیح نیست'),
       check('password')
         .not()
         .isEmpty()
-        .withMessage('password cant be empty'),
+        .withMessage('رمز عبور نباید خالی باشد'),
     ]
   }
 }

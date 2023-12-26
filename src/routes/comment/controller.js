@@ -9,7 +9,7 @@ const fs = require('fs');
 module.exports = new (class extends controller {
   async makeComment(req, res) {
     const comment = new this.Comment({
-      author:req.params.id,
+      author:req.body.userId,
       text:req.body.text,
     });
     comment.isApproved = false;
@@ -22,50 +22,95 @@ module.exports = new (class extends controller {
     });
   }
 
-  async makeReplyComment(req, res) {
+async makeReplyComment(req, res) {
+  try {
     const comment = new this.Comment({
-      author:req.body.author,
-      text:req.body.text,
+      author: req.body.author,
+      text: req.body.text,
     });
     comment.isApproved = false;
-    console.log('comment',comment)
     await comment.save();
+
     this.response({
       res,
-      message: ";نظر شما با موفقیت ساخته شد",
-      data:comment,
+      message: "نظر شما با موفقیت ساخته شد",
+      data: {
+        author: comment.author,
+        text: comment.text, // مقدار فیلد text که پاپولیت شده است
+        isApproved: comment.isApproved,
+        id:comment._id
+      },
+    });
+  } catch (error) {
+    console.error('Error in makeReplyComment:', error);
+    this.response({
+      res,
+      message: "خطا",
+      code: 500,
+      data: {},
     });
   }
+}
 
   async addReplyComment(req, res) {
-    try {
-      const comment = await this.Comment.findById(req.body.commentId);
-      if (!comment) {
-        return this.response({
-          res,
-          message: "نظر مورد نظر یافت نشد",
-          data: null,
-        });
-      }
-  
-      comment.reply.push(req.body.replyCommentId);
-      comment.isApproved = false;
-  
-      await comment.save();
-      
-      this.response({
+  try {
+    const comment = await this.Comment.findById(req.body.commentId);
+    if (!comment) {
+      return this.response({
         res,
-        message: "نظر شما با موفقیت ریپلای شد",
-        data: comment,
-      });
-    } catch (error) {
-      this.response({
-        res,
-        message: "خطا در اضافه کردن پاسخ به نظر",
-        data: {},
+        message: "نظر مورد نظر یافت نشد",
+        data: null,
       });
     }
+
+    comment.reply.push(req.body.replyCommentId);
+    comment.isApproved = false;
+
+    await comment.save();
+
+    const commentedProduct = await this.Product.findById(req.body.oneProductId)
+      .populate({
+    path: 'comments',
+    options: { sort: { createdAt: -1 } },
+    populate: [
+      { path: 'author', model: 'User' },
+      { path: 'likes', model: 'User' },
+      { path: 'reply', model: 'Comment', populate: [
+        { path: 'author', model: 'User' },
+        { path: 'likes', model: 'User' },
+      ]}
+    ]
+  })
+  .populate({
+    path: 'discount'
+  })
+  .populate({
+    path: 'comments.reply',
+    options: { sort: { createdAt: -1 } },
+    populate: [
+      { path: 'author', model: 'User' },
+      { path: 'likes', model: 'User' },
+      { path: 'reply', model: 'Comment', populate: [
+        { path: 'author', model: 'User' },
+        { path: 'likes', model: 'User' },
+      ]}
+    ]
+  });
+
+    this.response({
+      res,
+      message: "نظر شما با موفقیت ریپلای شد",
+      data: { "comment": comment, "oneProduct": commentedProduct }
+    });
+  } catch (error) {
+    this.response({
+      res,
+      message: "خطا در اضافه کردن پاسخ به نظر",
+      data: {},
+    });
   }
+}
+
   
 
   async deleteComment(req, res) {
@@ -138,17 +183,46 @@ module.exports = new (class extends controller {
   
       comment.likes.push(req.params.userid);
       const updatedComment = await comment.save();
+
+      const commentedProduct = await this.Product.findById(req.body.oneProductId)
+      .populate({
+    path: 'comments',
+    options: { sort: { createdAt: -1 } },
+    populate: [
+      { path: 'author', model: 'User' },
+      { path: 'likes', model: 'User' },
+      { path: 'reply', model: 'Comment', populate: [
+        { path: 'author', model: 'User' },
+        { path: 'likes', model: 'User' },
+      ]}
+    ]
+  })
+  .populate({
+    path: 'discount'
+  })
+  .populate({
+    path: 'comments.reply',
+    options: { sort: { createdAt: -1 } },
+    populate: [
+      { path: 'author', model: 'User' },
+      { path: 'likes', model: 'User' },
+      { path: 'reply', model: 'Comment', populate: [
+        { path: 'author', model: 'User' },
+        { path: 'likes', model: 'User' },
+      ]}
+    ]
+  });
   
       this.response({
         res,
         message: "کامنت با موفقیت لایک شد",
-        data: updatedComment
+        data: {"updatedComment":updatedComment,"commentedProduct":commentedProduct}
       });
     } catch (error) {
       this.response({
         res,
         message: "خطا در لایک کردن کامنت",
-        data: {}
+        data: {"updatedComment":{},"commentedProduct":commentedProduct}
       });
     }
   }

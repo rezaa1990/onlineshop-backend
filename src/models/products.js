@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const timestamp = require('mongoose-timestamp');
 const { Stream } = require('winston/lib/winston/transports');
+const autoPopulate = require('mongoose-autopopulate');
 
 const productSchema = new mongoose.Schema({
   category:{type:String},
@@ -40,13 +41,14 @@ const productSchema = new mongoose.Schema({
 
   discount:[{
     type:mongoose.Schema.Types.ObjectId,
-    ref:"َDiscount"
+    ref:"Discount"
   }],
 
   serialNumber:{type:String,required:true},
 
 });
 productSchema.plugin(timestamp);
+productSchema.plugin(autoPopulate);
 
 const Product = mongoose.model("Product", productSchema );
 module.exports = Product;

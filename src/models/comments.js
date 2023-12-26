@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
 const timestamp = require('mongoose-timestamp');
+const autoPopulate = require('mongoose-autopopulate');
 
 const commentSchema = new mongoose.Schema({
-  author: [{
+  author: {
     type:mongoose.Schema.Types.ObjectId,
     ref:"َUser"
-  }],
+  },
   text: String,
 
   date: { type: Date, default: Date.now },
@@ -22,6 +23,7 @@ const commentSchema = new mongoose.Schema({
     }],
 });
 commentSchema.plugin(timestamp);
+commentSchema.plugin(autoPopulate);
 
 const Comment = mongoose.model("Comment", commentSchema );
 module.exports = Comment;

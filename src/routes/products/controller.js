@@ -34,22 +34,46 @@ module.exports = new (class extends controller {
     });
 
   }
-  async getProduct(req, res) {
+ async getProduct(req, res) {
+  try {
     const products = await this.Product.find()
       .populate({
-        path: 'comments',
-        options: { sort: { createdAt: 1 } },
-      })
-      .populate({
-        path: 'comments',
-        populate: {
-          path: 'author',
-          model: 'User',
-        },
-      });
+    path: 'comments',
+    options: { sort: { createdAt: -1 } },
+    populate: [
+      { path: 'author', model: 'User' },
+      { path: 'likes', model: 'User' },
+      { path: 'reply', model: 'Comment', populate: [
+        { path: 'author', model: 'User' },
+        { path: 'likes', model: 'User' },
+      ]}
+    ]
+  })
+  .populate({
+    path: 'discount'
+  })
+  .populate({
+    path: 'comments.reply',
+    options: { sort: { createdAt: -1 } },
+    populate: [
+      { path: 'author', model: 'User' },
+      { path: 'likes', model: 'User' },
+      { path: 'reply', model: 'Comment', populate: [
+        { path: 'author', model: 'User' },
+        { path: 'likes', model: 'User' },
+      ]}
+    ]
+  });
+
     console.log(products);
     this.response({ res, message: "همه ی محصولات", code: 200, data: { products } });
+  } catch (error) {
+    
+    console.error(error);
+    this.response({ res, message: "مشکل در دریافت محصولات", code: 500 });
   }
+}
+
   
 
   async updateProduct(req, res) {
@@ -90,37 +114,103 @@ module.exports = new (class extends controller {
   };
   
 
-    async addLike(req, res) {
-      try {
-        const product = await this.Product.findById(req.params.id);
-        const index = product.numberOfLikes.indexOf(req.body.userId);
-        // اگر عنصر یافت شد
-        if (index !== -1) {
-          // حذف عنصر از آرایه
-          product.numberOfLikes.splice(index, 1);
-          await product.save();
-          return this.response({ res, message: "محصول آنلایک شد", code: 200, data: { product } });
-        }
-        // اضافه کردن
-        const numberOfLike = [...product.numberOfLikes, req.body.userId];
-        product.numberOfLikes = numberOfLike;
-        await product.save();
-        return this.response({ res, message: "محصول لایک شد", code: 200, data: { product } });
-      } catch (error) {
-        console.error('Error in addLike:', error);
-        return this.response({ res, message: "خطا", code: 500, data: {} });
-      }
-    };
+ async addLike(req, res) {
+  try {
+    let product = await this.Product.findById(req.params.id);
+    const index = product.numberOfLikes.indexOf(req.body.userId);
+
+    if (index !== -1) {
+      product.numberOfLikes.splice(index, 1);
+    } else {
+      product.numberOfLikes.push(req.body.userId);
+    }
+
+    const updatedProduct = await this.Product.findByIdAndUpdate(
+      product._id,
+      { $set: { numberOfLikes: product.numberOfLikes } },
+      { new: true }
+    )
+    .populate({
+    path: 'comments',
+    options: { sort: { createdAt: -1 } },
+    populate: [
+      { path: 'author', model: 'User' },
+      { path: 'likes', model: 'User' },
+      { path: 'reply', model: 'Comment', populate: [
+        { path: 'author', model: 'User' },
+        { path: 'likes', model: 'User' },
+      ]}
+    ]
+  })
+  .populate({
+    path: 'discount'
+  })
+  .populate({
+    path: 'comments.reply',
+    options: { sort: { createdAt: -1 } },
+    populate: [
+      { path: 'author', model: 'User' },
+      { path: 'likes', model: 'User' },
+      { path: 'reply', model: 'Comment', populate: [
+        { path: 'author', model: 'User' },
+        { path: 'likes', model: 'User' },
+      ]}
+    ]
+  });
+
+    return this.response({ res, message: "محصول آپدیت شد", code: 200, data: { updatedProduct } });
+  } catch (error) {
+    console.error('Error in addLike:', error);
+    return this.response({ res, message: "خطا", code: 500, data: {} });
+  }
+};
+
     
 
-    async addComment(req,res){
-      const product = await this.Product.findById(req.params.id);
-      if(!product) return this.response({res, message: "محصولی یافت نشد  ", code:404, data: {}});
-      product.comments = [...product.comments,req.body.commentId];
-      await product.save();
-      this.response({ res, message: "نظر شما ثبت شد", code:200, data: {product} });
+   async addComment(req, res) {
+  try {
+    let product = await this.Product.findById(req.params.id);
+    if (!product) return this.response({ res, message: "محصولی یافت نشد", code: 404, data: {} });
 
-    };
+    product.comments = [...product.comments, req.body.commentId];
+    await product.save();
+
+    product = await this.Product.findById(product._id)
+      .populate({
+    path: 'comments',
+    options: { sort: { createdAt: -1 } },
+    populate: [
+      { path: 'author', model: 'User' },
+      { path: 'likes', model: 'User' },
+      { path: 'reply', model: 'Comment', populate: [
+        { path: 'author', model: 'User' },
+        { path: 'likes', model: 'User' },
+      ]}
+    ]
+  })
+  .populate({
+    path: 'discount'
+  })
+  .populate({
+    path: 'comments.reply',
+    options: { sort: { createdAt: -1 } },
+    populate: [
+      { path: 'author', model: 'User' },
+      { path: 'likes', model: 'User' },
+      { path: 'reply', model: 'Comment', populate: [
+        { path: 'author', model: 'User' },
+        { path: 'likes', model: 'User' },
+      ]}
+    ]
+  });
+
+    this.response({ res, message: "نظر شما ثبت شد", code: 200, data: { product } });
+  } catch (error) {
+    console.error(error);
+    this.response({ res, message: "خطا در ثبت نظر", code: 500, data: {} });
+  }
+};
+
 
     async deleteComment(req, res) {
       console.log("reqqqqqqqq", req);
