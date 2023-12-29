@@ -37,7 +37,7 @@ module.exports = new (class extends controller {
  async getProduct(req, res) {
   try {
     const products = await this.Product.find()
-      .populate({
+    .populate({
     path: 'comments',
     options: { sort: { createdAt: -1 } },
     populate: [
@@ -53,7 +53,7 @@ module.exports = new (class extends controller {
     path: 'discount'
   })
   .populate({
-    path: 'comments.reply',
+    path: 'comments',
     options: { sort: { createdAt: -1 } },
     populate: [
       { path: 'author', model: 'User' },
