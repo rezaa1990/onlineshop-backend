@@ -39,10 +39,10 @@ const productSchema = new mongoose.Schema({
 
   numberOfSell:[{type:String}],
 
-  discount:[{
+  discount:{
     type:mongoose.Schema.Types.ObjectId,
     ref:"Discount"
-  }],
+  },
 
   serialNumber:{type:String,required:true},
 
