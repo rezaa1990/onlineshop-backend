@@ -111,6 +111,26 @@ module.exports = new (class extends controller {
       });
     }
   }
+
+  async getOrder(req, res) {
+    try {
+      const orders = await this.Order.find();
+      this.response({
+        res,
+        message: "‌اطلاعات پستی دریافت شد و سفارش آماده ی پرداخت نهایی میباشد",
+        data: {
+          orders
+        },
+      });
+  
+    } catch (error) {
+      this.response({
+        res,
+        message: "خطا در دریافت سفارشها",
+        data: {},
+      });
+    }
+  }
   
   
 })();
