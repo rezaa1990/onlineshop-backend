@@ -114,7 +114,8 @@ module.exports = new (class extends controller {
 
   async getOrder(req, res) {
     try {
-      const orders = await this.Order.find();
+      const orders = await this.Order.find().populate({
+    path: 'productsId'})
       this.response({
         res,
         message: "‌اطلاعات پستی دریافت شد و سفارش آماده ی پرداخت نهایی میباشد",
