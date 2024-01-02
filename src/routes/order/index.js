@@ -25,4 +25,11 @@ router.get(
   controller.getOrder,
 );
 
+router.put(
+  '/sendtopostorder',
+  isLoggined,
+  isAdmin,
+  controller.sendToPostOrder,
+);
+
 module.exports = router;

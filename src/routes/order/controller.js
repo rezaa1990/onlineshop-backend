@@ -132,6 +132,32 @@ module.exports = new (class extends controller {
       });
     }
   }
+
+async sendToPostOrder(req, res) {
+  try {
+    const selectedOrders = req.body.selectedOrders;
+    await this.Order.updateMany(
+      { _id: { $in: selectedOrders } },
+      { $set: { sendToPost: true } }
+    );
+
+    const orders = await this.Order.find({ _id: { $in: selectedOrders } });
+    this.response({
+      res,
+      message: "محصولات انتخاب شده به پست ارسال شدند",
+      data: {
+        orders,
+      },
+    });
+  } catch (error) {
+    this.response({
+      res,
+      message: "خطا در ارسال محصولات انتخاب شده به پست",
+      data: {},
+    });
+  }
+}
+
   
   
 })();
