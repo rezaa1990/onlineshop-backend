@@ -145,18 +145,18 @@ module.exports = new (class extends controller {
   .populate({
     path: 'discount'
   })
-  .populate({
-    path: 'comments.reply',
-    options: { sort: { createdAt: -1 } },
-    populate: [
-      { path: 'author', model: 'User' },
-      { path: 'likes', model: 'User' },
-      { path: 'reply', model: 'Comment', populate: [
-        { path: 'author', model: 'User' },
-        { path: 'likes', model: 'User' },
-      ]}
-    ]
-  });
+  // .populate({
+  //   path: 'comments.reply',
+  //   options: { sort: { createdAt: -1 } },
+  //   populate: [
+  //     { path: 'author', model: 'User' },
+  //     { path: 'likes', model: 'User' },
+  //     { path: 'reply', model: 'Comment', populate: [
+  //       { path: 'author', model: 'User' },
+  //       { path: 'likes', model: 'User' },
+  //     ]}
+  //   ]
+  // });
 
     return this.response({ res, message: "محصول آپدیت شد", code: 200, data: { updatedProduct } });
   } catch (error) {
