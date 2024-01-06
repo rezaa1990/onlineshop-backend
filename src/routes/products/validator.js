@@ -16,24 +16,28 @@ module.exports = new class{
         .not()
         .isEmpty()
         .withMessage('قیمت محصول نباید خالی باشد'),
-        check('price')
+      check('price')
         .isNumeric()
         .withMessage('قیمت محصول باید عدد باشد'),
       check('numberOfProduct')
         .not()
         .isEmpty()
         .withMessage('تعداد موجودی محصول نباید خالی باشد'),
-        check('numberOfProduct')
+      check('numberOfProduct')
         .isNumeric()
         .withMessage('تعداد محصول باید عدد باشد'),
       check('description')
         .not()
         .isEmpty()
         .withMessage('توضیحات محصول نباید خالی باشد'),
-        check('serialNumber')
+      check('serialNumber')
         .not()
         .isEmpty()
         .withMessage('شماره سریال محصول نباید خالی باشد'),
+      // check('images')
+      //   .not()
+      //   .isEmpty()
+      //   .withMessage('تصویر محصول نباید خالی باشد'),
     ]
   }
 

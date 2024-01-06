@@ -19,7 +19,7 @@ module.exports = new (class extends controller {
     const product = new this.Product({
       category:req.body.category,
       name:req.body.name,
-      // images:req.body.imgage,
+      images:req.body.imageId,
       price:req.body.price,
       description:req.body.description,
       numberOfProduct:req.body.numberOfProduct,
@@ -37,6 +37,7 @@ module.exports = new (class extends controller {
  async getProduct(req, res) {
   try {
     const products = await this.Product.find()
+    .populate({ path: 'images', model: 'Image' })
     .populate({
     path: 'comments',
     options: { sort: { createdAt: -1 } },

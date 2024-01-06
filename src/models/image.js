@@ -6,10 +6,6 @@ const imageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  image: {
-    type: Buffer,
-    required: true
-  },
   imagePath: {
     type: String,
     required: true
