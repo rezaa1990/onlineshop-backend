@@ -50,4 +50,16 @@ module.exports = new class{
         .withMessage('رمز عبور نباید خالی باشد'),
     ]
   }
+
+  resetPasswordValidator(){
+    return [
+      check('email')
+        .isEmail()
+        .withMessage('ایمیل صحیح نیست'),
+      check('email')
+        .not()
+        .isEmpty()
+        .withMessage('ایمیل نباید خالی باشد'),
+    ]
+  }
 }

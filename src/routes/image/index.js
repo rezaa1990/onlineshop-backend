@@ -5,7 +5,7 @@ const controller = require('./controller');
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '/home/reza/Desktop/node-shop/src/routes/image/uploads') // مسیر ذخیره فایل آپلود شده
+    cb(null, '/home/reza/Desktop/bootstrap-shop/src/images/panel-img') // مسیر ذخیره فایل آپلود شده
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname) // نام فایل آپلود شده
