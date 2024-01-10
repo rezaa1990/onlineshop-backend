@@ -51,15 +51,43 @@ module.exports = new class{
     ]
   }
 
-  resetPasswordValidator(){
+  resetPasswordEmailValidator(){
     return [
       check('email')
         .isEmail()
-        .withMessage('ایمیل صحیح نیست'),
+        .withMessage('ایمیل صحیح نیست,'),
       check('email')
         .not()
         .isEmpty()
         .withMessage('ایمیل نباید خالی باشد'),
+    ]
+  }
+
+    resetPasswordValidator(){
+    return [
+      check('email')
+        .isEmail()
+        .withMessage('ایمیل صحیح نیست,'),
+      check('email')
+        .not()
+        .isEmpty()
+        .withMessage('ایمیل نباید خالی باشد,'),
+      check('newPassword')
+        .not()
+        .isEmpty()
+        .withMessage('فیلد رمزجدید نباید خالی باشد,'),
+      check('RepeatNewPassword')
+        .not()
+        .isEmpty()
+        .withMessage('فیلد تکرار رمز جدید نباید خالی باشد,')
+        .isLength({ min: 6, max: 20 })
+        .withMessage('رمز عبور باید حداقل ۶ و حداکثر ۲۰ کاراکتر باشد.')
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
+        .withMessage('رمز عبور باید شامل حروف بزرگ و کوچک، اعداد و علائم باشد.'),
+      check('resetCode')
+        .not()
+        .isEmpty()
+        .withMessage('فیلد کد بازیابی رمز نباید خالی باشد,'),
     ]
   }
 }

@@ -38,6 +38,11 @@ const userSchema = new mongoose.Schema({
     type:mongoose.Schema.Types.ObjectId,
     ref:"Product",
   }],
+
+  resetCode: String,
+
+  resetCodeExpiration: Date,
+
 });
 userSchema.plugin(timestamp);
 

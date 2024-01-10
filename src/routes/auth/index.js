@@ -18,7 +18,14 @@ router.post(
 );
 
 router.put(
-  '/resetpassword',
+  '/resetpasswordemail',
+  validator.resetPasswordEmailValidator(),
+  controller.validate,
+  controller.resetPasswordEmail
+);
+
+router.put(
+  '/resetpasswor',
   validator.resetPasswordValidator(),
   controller.validate,
   controller.resetPassword
