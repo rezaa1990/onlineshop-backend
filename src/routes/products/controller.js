@@ -146,6 +146,7 @@ module.exports = new (class extends controller {
   .populate({
     path: 'discount'
   })
+  .populate({ path: 'images', model: 'Image' })
   // .populate({
   //   path: 'comments.reply',
   //   options: { sort: { createdAt: -1 } },
@@ -203,7 +204,9 @@ module.exports = new (class extends controller {
         { path: 'likes', model: 'User' },
       ]}
     ]
-  });
+  })
+  .populate({ path: 'images', model: 'Image' })
+  ;
 
     this.response({ res, message: "نظر شما ثبت شد", code: 200, data: { product } });
   } catch (error) {

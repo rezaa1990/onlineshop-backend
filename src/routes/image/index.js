@@ -16,7 +16,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 router.post('/addimage', 
-upload.single('image'),//میدلور برای آپلود تصویر در مسیر مورد نظر(بالا)
+upload.array('images'),//میدلور برای آپلود تصویر در مسیر مورد نظر(بالا)
 controller.addImage
 );
 

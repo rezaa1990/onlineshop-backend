@@ -11,16 +11,20 @@ module.exports = new (class extends controller {
   async addImage(req, res) {
     try {
       console.log(req.file);
-      const image = new this.Image({
-        imageName: req.file.originalname,
-        imagePath: req.file.path
-      });
-      await image.save();
-      this.response({
-        res,
-        message: "تصویر با موفقیت آپلود شد",
-        data: { image },
-      });
+      const savedImages = [];
+      for (const image of req.files) {
+      const savedImage = await this.Image.create({
+      imageName: image.originalname,
+      imagePath: image.path,
+       });
+  savedImages.push(savedImage);
+}
+
+this.response({
+  res,
+  message: "تصاویر با موفقیت آپلود شدند",
+  data: { images: savedImages },
+});
     } catch (error) {
       console.error(error);
       this.response({
