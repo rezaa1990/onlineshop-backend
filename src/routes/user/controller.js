@@ -47,7 +47,21 @@ module.exports = new (class extends controller {
   }
   
 
-  async me(req, res){
-    this.response({res,data:req.user})
-    }
+async me(req, res) {
+  try {
+    const user = await this.User.findById(req.user._id).populate({
+      path: 'basket',
+      populate: [
+        { path: 'images', model: 'Image' }
+      ]
+    }).exec(); // افزودن exec() برای اجرای Query
+    console.log("usus", user);
+    this.response({ res, data: user });
+  } catch (error) {
+    console.error(error);
+    this.response({ res, status: 500, message: 'خطا در دریافت اطلاعات کاربر' });
+  }
+}
+
+
 })();
