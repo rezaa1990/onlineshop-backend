@@ -22,7 +22,6 @@ router.put(
   '/updateproduct/:id',
   isLoggined,
   isAdmin,
-  validator.productsValidator(),
   controller.validate,
   controller.updateProduct
 );
