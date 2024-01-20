@@ -299,18 +299,9 @@ module.exports = new (class extends controller {
         { _id: { $in: selectedProducts } },
         { $set: { discount: null } }
       );
-  
-      if (updateResult.nModified !== selectedProducts.length) {
-        return this.response({
-          res,
-          message: "یک یا چند محصول با مشخصات داده شده تغییر یافتند",
-          data: {}
-        });
-      }
-  
       this.response({
         res,
-        message: " تخفیف با موفقیت از محصولات انتخاب شده خذف شد",
+        message: " تخفیف با موفقیت از محصولات انتخاب شده حذف شد",
         data: {}
       });
     } catch (error) {
