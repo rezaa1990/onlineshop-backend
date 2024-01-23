@@ -54,7 +54,7 @@ module.exports = new (class extends controller {
       });
     }
     const role = user.role;
-    const token = jwt.sign({ _id: user.id }, config.get("jwt_key"));
+    const token = jwt.sign({ _id: user.id }, config.get("jwt_key"),{ expiresIn: 3600 });
     this.response({ res, message: "successfuly logged in", data: { token,role} });
   }
 
