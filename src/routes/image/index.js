@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const controller = require('./controller');
+const {isLoggined , isAdmin} = require('./../../middlewares/auth')
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -16,6 +17,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 router.post('/addimage', 
+isLoggined, 
+isAdmin,
 upload.array('images'),//میدلور برای آپلود تصویر در مسیر مورد نظر(بالا)
 controller.addImage
 );
