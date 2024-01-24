@@ -9,7 +9,7 @@ async function isLoggined(req, res, next) {
   if (!token){
         res.status(401).json({
       message:"ابتدا باید وارد سایت شوید",
-      data:{}
+      data:{res:false}
     });
   }
 
@@ -36,7 +36,7 @@ async function isLoggined(req, res, next) {
   } catch (ex) {
     res.status(400).json({
       message:"ابتدا باید وارد سایت شوید",
-      data:{}
+      data:{res:false}
     });
   }
 }
