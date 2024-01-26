@@ -8,15 +8,15 @@ const userSchema = new mongoose.Schema({
 
   lName: { type: String,},
 
-  mobile: { type: String,unique: true},
+  mobile: { type: String,unique: true,select: false},
 
-  email: { type: String, unique: true},
+  email: { type: String, unique: true,select: false},
 
-  address: { type: String,},
+  address: { type: String,select: false},
 
-  postalCode: { type: String,},
+  postalCode: { type: String,select: false},
 
-  password: {type:String , required:true},
+  password: {type:String , required:true , select: false},
 
   basket:[
     {
@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
     ref:"Product",
   }],
 
-  resetCode: String,
+  resetCode: {type:String , select: false},
 
   resetCodeExpiration: Date,
 
