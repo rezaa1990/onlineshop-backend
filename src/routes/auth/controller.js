@@ -42,7 +42,7 @@ module.exports = new (class extends controller {
       return this.response({
         res,
         code: 400,
-        message: "invalid eamil or password",
+        message: "ایمیل یا رمز عبور اشتباه است",
       });
     }
     const isValid = await bcrypt.compare(req.body.password, user.password);
@@ -50,12 +50,12 @@ module.exports = new (class extends controller {
       return this.response({
         res,
         code: 400,
-        message: "invalid eamil or password",
+        message: "ایمیل یا رمز عبور اشتباه است",
       });
     }
     const role = user.role;
     const token = jwt.sign({ _id: user.id }, config.get("jwt_key"),{ expiresIn: 3600 });
-    this.response({ res, message: "successfuly logged in", data: { token,role} });
+    this.response({ res, message: "ورود موفقیت آمیز ", data: { token,role} });
   }
 
    async resetPasswordEmail(req, res) {
