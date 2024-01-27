@@ -37,7 +37,7 @@ module.exports = new (class extends controller {
   }
 
   async login(req, res) {
-    const user = await this.User.findOne({ email: req.body.email });
+    const user = await this.User.findOne({ email: req.body.email }).select('+password');
     if (!user) {
       return this.response({
         res,
@@ -60,7 +60,7 @@ module.exports = new (class extends controller {
 
    async resetPasswordEmail(req, res) {
   try {
-    const user = await this.User.findOne({ email: req.body.email });
+    const user = await this.User.findOne({ email: req.body.email }).select('resetCode');
     if (!user) {
       return this.response({
         res,
@@ -100,7 +100,7 @@ module.exports = new (class extends controller {
 
 async resetPassword(req, res) {
   try {
-    const user = await this.User.findOne({ email: req.body.email });
+    const user = await this.User.findOne({ email: req.body.email }).select('resetCode');
     if (!user) {
       return this.response({
         res,
