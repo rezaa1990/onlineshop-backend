@@ -24,6 +24,7 @@ module.exports = new (class extends controller {
 
 async makeReplyComment(req, res) {
   try {
+    console.log(req.body);
     const comment = new this.Comment({
       author: req.body.author,
       text: req.body.text,
@@ -64,12 +65,11 @@ async makeReplyComment(req, res) {
     }
 
     comment.reply.push(req.body.replyCommentId);
-    comment.isApproved = false;
 
     await comment.save();
 
     const commentedProduct = await this.Product.findById(req.body.oneProductId)
-      .populate({
+    .populate({
     path: 'comments',
     options: { sort: { createdAt: -1 } },
     populate: [
@@ -84,6 +84,10 @@ async makeReplyComment(req, res) {
   .populate({
     path: 'discount'
   })
+  .populate({
+  path: 'images',
+  model: 'Image'
+})
   .populate({
     path: 'comments.reply',
     options: { sort: { createdAt: -1 } },
@@ -170,62 +174,72 @@ async makeReplyComment(req, res) {
   }
 
  
-  async likeComment(req, res) {
-    try {
-      const comment = await this.Comment.findById(req.params.commentid);
-      if (!comment) {
-        return this.response({
-          res,
-          message: "کامنتی با این مشخصات یافت نشد",
-          data: {}
-        });
-      }
-  
-      comment.likes.push(req.params.userid);
-      const updatedComment = await comment.save();
-
-      const commentedProduct = await this.Product.findById(req.body.oneProductId)
-      .populate({
-    path: 'comments',
-    options: { sort: { createdAt: -1 } },
-    populate: [
-      { path: 'author', model: 'User' },
-      { path: 'likes', model: 'User' },
-      { path: 'reply', model: 'Comment', populate: [
-        { path: 'author', model: 'User' },
-        { path: 'likes', model: 'User' },
-      ]}
-    ]
-  })
-  .populate({
-    path: 'discount'
-  })
-  .populate({
-    path: 'comments.reply',
-    options: { sort: { createdAt: -1 } },
-    populate: [
-      { path: 'author', model: 'User' },
-      { path: 'likes', model: 'User' },
-      { path: 'reply', model: 'Comment', populate: [
-        { path: 'author', model: 'User' },
-        { path: 'likes', model: 'User' },
-      ]}
-    ]
-  });
-  
-      this.response({
+async likeComment(req, res) {
+  let oneProduct; // تعریف متغیر
+  try {
+    const comment = await this.Comment.findById(req.params.commentid);
+    if (!comment) {
+      return this.response({
         res,
-        message: "کامنت با موفقیت لایک شد",
-        data: {"updatedComment":updatedComment,"commentedProduct":commentedProduct}
-      });
-    } catch (error) {
-      this.response({
-        res,
-        message: "خطا در لایک کردن کامنت",
-        data: {"updatedComment":{},"commentedProduct":commentedProduct}
+        message: "کامنتی با این مشخصات یافت نشد",
+        data: {}
       });
     }
+    comment.likes.push(req.params.userid);
+    const updatedComment = await comment.save();
+
+    oneProduct = await this.Product.findById(req.body.oneProductId)
+      .populate({
+        path: 'comments',
+        options: { sort: { createdAt: -1 } },
+        populate: [
+          { path: 'author', model: 'User' },
+          { path: 'likes', model: 'User' },
+          {
+            path: 'reply', model: 'Comment', populate: [
+              { path: 'author', model: 'User' },
+              { path: 'likes', model: 'User' },
+            ]
+          }
+        ]
+      })
+      .populate({
+        path: 'discount'
+      })
+.populate({
+  path: 'images',
+  model: 'Image'
+})
+      .populate({
+        path: 'comments.reply',
+        options: { sort: { createdAt: -1 } },
+        populate: [
+          { path: 'author', model: 'User' },
+          { path: 'likes', model: 'User' },
+          {
+            path: 'reply', model: 'Comment', populate: [
+              { path: 'author', model: 'User' },
+              { path: 'likes', model: 'User' },
+            ]
+          }
+        ]
+      })
+    console.group("002",oneProduct)
+    this.response({
+      res,
+      message: "کامنت با موفقیت لایک شد",
+      data: {"likededProduct": oneProduct }
+    });
+  } catch (error) {
+    this.response({
+      res,
+      message: "خطا در لایک کردن کامنت",
+      data: { "updatedComment": {}, "likededProduct":{} } // استفاده از یک مقدار پیش‌فرض
+    });
   }
+}
+
+
 
   async replyComment(req, res) {
     console.log(req.body.replyComment,req.params.id)
