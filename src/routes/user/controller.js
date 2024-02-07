@@ -49,7 +49,7 @@ module.exports = new (class extends controller {
 
 async me(req, res) {
   try {
-    const user = await this.User.findById(req.user._id).populate({
+    const user = await this.User.findById(req.user._id).select('+email +mobile').populate({
       path: 'basket',
       populate: [
         { path: 'images', model: 'Image' }
